@@ -1,0 +1,39 @@
+# GestInt — Reglas de seguridad Apache
+# Aplica a XAMPP local y a cualquier servidor Apache con mod_rewrite
+
+# Ocultar listado de directorios (Index Of)
+Options -Indexes
+
+# Bloquear acceso directo a archivos de configuración y sistema
+<FilesMatch "\.(sql|log|ini|env|sh|bat|bak|old|md)$">
+    Require all denied
+</FilesMatch>
+
+# Bloquear acceso directo a includes/ desde el navegador
+# (sus archivos solo se usan vía require_once, nunca directamente)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquear acceso directo a includes/
+    RewriteRule ^includes/ - [F,L]
+</IfModule>
+
+# Cabeceras de seguridad HTTP básicas
+<IfModule mod_headers.c>
+    # Evita que el navegador ejecute archivos con tipo MIME diferente al declarado
+    Header set X-Content-Type-Options "nosniff"
+
+    # Evita que la app se cargue dentro de un iframe (clickjacking)
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # Activa el filtro XSS del navegador
+    Header set X-XSS-Protection "1; mode=block"
+
+    # No enviar la URL completa como Referer a sitios externos
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Evitar acceso a archivos ocultos (empiezan por punto), excepto este mismo
+<FilesMatch "^\.(?!htaccess)">
+    Require all denied
+</FilesMatch>

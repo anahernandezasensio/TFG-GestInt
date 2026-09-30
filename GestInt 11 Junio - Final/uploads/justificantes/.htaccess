@@ -1,0 +1,3 @@
+# Bloquear acceso HTTP directo a justificantes
+# Los archivos se sirven únicamente a través de descargar_justificante.php
+Require all denied

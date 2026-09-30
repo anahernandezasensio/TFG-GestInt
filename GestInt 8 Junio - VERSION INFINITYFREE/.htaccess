@@ -1,0 +1,30 @@
+# GestInt — Reglas de seguridad Apache (VERSION INFINITYFREE)
+
+# Ocultar listado de directorios
+Options -Indexes
+
+# Bloquear acceso a archivos de configuración y sistema
+<FilesMatch "\.(sql|log|ini|env|sh|bat|bak|old|md)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Bloquear acceso directo a includes/
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^includes/ - [F,L]
+</IfModule>
+
+# Cabeceras de seguridad HTTP (solo si el módulo está disponible)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Bloquear archivos ocultos (excepto .htaccess)
+<FilesMatch "^\.(?!htaccess)">
+    Order deny,allow
+    Deny from all
+</FilesMatch>

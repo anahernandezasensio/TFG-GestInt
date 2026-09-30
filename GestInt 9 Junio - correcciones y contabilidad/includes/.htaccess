@@ -1,0 +1,3 @@
+# Bloquear todo acceso web directo a este directorio
+# Los archivos de includes/ solo se usan internamente vía require_once
+Require all denied

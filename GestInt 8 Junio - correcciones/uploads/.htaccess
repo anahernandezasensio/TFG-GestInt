@@ -1,0 +1,6 @@
+# Carpeta de uploads: permitir ver archivos estáticos pero nunca ejecutar PHP
+# Evita que un archivo .php subido como justificante se pueda ejecutar
+Options -Indexes
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
